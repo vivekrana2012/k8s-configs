@@ -3,6 +3,7 @@ kind: PersistentVolume
 metadata:
   name: pv-postgres
 spec:
+  storageClassName: manual
   accessModes:
     - ReadWriteOnce
   capacity:
