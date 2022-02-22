@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: insert-app-deployment
+  labels:
+    app: insert-app
+spec:
+  replicas: 1
+  selector:
+   matchLabels:
+    app: insert-app
+  template:
+    metadata:
+      labels:
+        app: insert-app
+    spec:
+      containers:
+      - name: insert-app
+        image: vivekrana2012/insert-app
+        ports:
+        - containerPort: 8080
