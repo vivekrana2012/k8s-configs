@@ -13,7 +13,8 @@ import java.math.BigDecimal;
 public class Transaction {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(columnDefinition = "serial")
     private int id;
     private String status;
     private BigDecimal amount;
