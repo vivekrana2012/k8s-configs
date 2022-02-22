@@ -27,6 +27,7 @@ public class Transaction implements Persistable<Integer> {
     @Column(name = "pay_id")
     private int paymentMethodId;
 
+    @Column(name = "timestamp")
     private LocalDateTime timestamp;
 
     @Override
