@@ -3,10 +3,7 @@ package org.postgrestest.insertapp;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Setter
@@ -16,6 +13,7 @@ import java.math.BigDecimal;
 public class Transaction {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private String status;
     private BigDecimal amount;
