@@ -2,6 +2,7 @@ package org.postgrestest.insertapp;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.domain.Persistable;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -11,7 +12,7 @@ import java.time.LocalDateTime;
 @Getter
 @Table(name = "transaction")
 @Entity
-public class Transaction {
+public class Transaction implements Persistable<Integer> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,4 +28,9 @@ public class Transaction {
     private int paymentMethodId;
 
     private LocalDateTime timestamp;
+
+    @Override
+    public boolean isNew() {
+        return true;
+    }
 }
