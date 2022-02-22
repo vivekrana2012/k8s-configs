@@ -19,3 +19,4 @@ spec:
         image: vivekrana2012/insert-app
         ports:
         - containerPort: 8080
+        restartPolicy: OnFailure
