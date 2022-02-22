@@ -1,7 +1,15 @@
 
 spring:
+  jpa:
+    properties:
+      hibernate:
+        jdbc:
+          batch_size: 200
+        order_inserts: true
   datasource:
     url: jdbc:postgresql://svc-postgres/test
     username: test
     password: test
     driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 16

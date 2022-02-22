@@ -1,11 +1,8 @@
 package org.postgrestest.insertapp;
 
-import org.springframework.stereotype.Service;
-
 import java.math.BigDecimal;
 import java.util.Random;
 
-@Service
 public class RandomGenerator {
 
     private final Random random = new Random();
