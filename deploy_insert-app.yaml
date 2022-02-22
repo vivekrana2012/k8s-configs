@@ -14,9 +14,9 @@ spec:
       labels:
         app: insert-app
     spec:
+      restartPolicy: OnFailure
       containers:
       - name: insert-app
         image: vivekrana2012/insert-app
         ports:
         - containerPort: 8080
-        restartPolicy: OnFailure
