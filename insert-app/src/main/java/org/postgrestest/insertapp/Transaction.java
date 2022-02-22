@@ -34,4 +34,8 @@ public class Transaction implements Persistable<Integer> {
     public boolean isNew() {
         return true;
     }
+
+    public Integer getId() {
+        return this.id;
+    }
 }
