@@ -1,7 +1,7 @@
 
 spring:
   datasource:
-    url: jdbc:postgresql://postgres/test
+    url: jdbc:postgresql://svc-postgres/test
     username: test
     password: test
     driver-class-name: org.postgresql.Driver
