@@ -24,6 +24,7 @@ CREATE TABLE transaction(
     amount real NOT NULL,
     m_id int,
     pay_id int,
+    timestamp timestamp,
     CONSTRAINT fk_merchant
       FOREIGN KEY(m_id) 
 	  REFERENCES merchant(id),
@@ -31,3 +32,17 @@ CREATE TABLE transaction(
       FOREIGN KEY(pay_id) 
 	  REFERENCES payment_method(id)
 );
+
+ALTER TABLE transaction
+ADD COLUMN timestamp timestamp;
+
+\timing on
+
+select count(*) as total_count, sum(amount) as total_amount, m.name as merchant, p.name as pay_meth 
+from transaction t 
+inner join 
+    merchant m ON t.m_id = m.id 
+inner join 
+    payment_method p ON t.pay_id = p.id 
+where t.pay_id = 1
+group by m.name, p.name;

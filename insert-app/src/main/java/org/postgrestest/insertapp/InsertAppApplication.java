@@ -4,6 +4,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,6 +46,7 @@ public class InsertAppApplication implements CommandLineRunner {
                     transaction.setAmount(randomGenerator.getAmount());
                     transaction.setMerchantId(merchant.getId());
                     transaction.setPaymentMethodId(paymentMethod.getId());
+                    transaction.setTimestamp(LocalDateTime.now());
 
                     transactions.add(transaction);
 

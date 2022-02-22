@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Setter
 @Getter
@@ -24,4 +25,6 @@ public class Transaction {
 
     @Column(name = "pay_id")
     private int paymentMethodId;
+
+    private LocalDateTime timestamp;
 }
