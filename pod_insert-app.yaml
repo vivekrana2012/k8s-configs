@@ -1,0 +1,11 @@
+apiVersion: apps/v1
+kind: Pod
+metadata:
+  name: insert-app
+spec:
+  restartPolicy: OnFailure
+  containers:
+  - name: insert-app
+    image: vivekrana2012/insert-app
+    ports:
+    - containerPort: 8080
