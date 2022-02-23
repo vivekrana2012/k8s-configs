@@ -1,0 +1,111 @@
+test=# explain analyze WITH transactions as (select count(*) as total_count, sum(amount) as total_amount, m_id, pay_id
+from transaction t
+where t.timestamp between '2022-02-22 15:49:36.043858' AND '2022-02-22 15:59:59.999999'
+group by m_id, pay_id)
+select t.total_count, t.total_amount, m.name as merchant, p.name as payment_method from transactions t
+inner join
+    merchant m ON t.m_id = m.id
+inner join
+    payment_method p ON t.pay_id = p.id ;
+                                                                                                      QUERY PLAN
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--------------------------
+ Hash Join  (cost=240416.10..240443.72 rows=16 width=76) (actual time=2205.683..2211.224 rows=16 loops=1)
+   Hash Cond: (p.id = t.pay_id)
+   ->  Seq Scan on payment_method p  (cost=0.00..22.70 rows=1270 width=36) (actual time=0.038..0.040 rows=4 loops=1)
+   ->  Hash  (cost=240415.90..240415.90 rows=16 width=48) (actual time=2205.616..2211.143 rows=16 loops=1)
+         Buckets: 1024  Batches: 1  Memory Usage: 9kB
+         ->  Hash Join  (cost=240388.28..240415.90 rows=16 width=48) (actual time=2205.594..2211.131 rows=16 loops=1)
+               Hash Cond: (m.id = t.m_id)
+               ->  Seq Scan on merchant m  (cost=0.00..22.70 rows=1270 width=36) (actual time=0.008..0.010 rows=4 loops=1)
+               ->  Hash  (cost=240388.08..240388.08 rows=16 width=20) (actual time=2205.566..2211.092 rows=16 loops=1)
+                     Buckets: 1024  Batches: 1  Memory Usage: 9kB
+                     ->  Finalize GroupAggregate  (cost=240383.71..240387.92 rows=16 width=20) (actual time=2205.486..2211.054 rows=16 loops=1)
+                           Group Key: t.m_id, t.pay_id
+                           ->  Gather Merge  (cost=240383.71..240387.44 rows=32 width=20) (actual time=2205.470..2211.018 rows=48 loops=1)
+                                 Workers Planned: 2
+                                 Workers Launched: 2
+                                 ->  Sort  (cost=239383.68..239383.72 rows=16 width=20) (actual time=2153.979..2153.982 rows=16 loops=3)
+                                       Sort Key: t.m_id, t.pay_id
+                                       Sort Method: quicksort  Memory: 26kB
+                                       Worker 0:  Sort Method: quicksort  Memory: 26kB
+                                       Worker 1:  Sort Method: quicksort  Memory: 26kB
+                                       ->  Partial HashAggregate  (cost=239383.20..239383.36 rows=16 width=20) (actual time=2153.911..2153.919 rows=16 loops=3)
+                                             Group Key: t.m_id, t.pay_id
+                                             Batches: 1  Memory Usage: 24kB
+                                             Worker 0:  Batches: 1  Memory Usage: 24kB
+                                             Worker 1:  Batches: 1  Memory Usage: 24kB
+                                             ->  Parallel Seq Scan on transaction t  (cost=0.00..217669.36 rows=2171384 width=12) (actual time=32.969..1486.420 rows=1624933 loops=3)
+                                                   Filter: (("timestamp" >= '2022-02-22 15:49:36.043858'::timestamp without time zone) AND ("timestamp" <= '2022-02-22 15:59:59.999999'::time
+stamp without time zone))
+                                                   Rows Removed by Filter: 3708400
+ Planning Time: 0.908 ms
+ JIT:
+   Functions: 48
+   Options: Inlining false, Optimization false, Expressions true, Deforming true
+   Timing: Generation 14.619 ms, Inlining 0.000 ms, Optimization 3.871 ms, Emission 93.380 ms, Total 111.870 ms
+ Execution Time: 2219.203 ms
+(34 rows)
+
+Time: 2287.998 ms (00:02.288)
+
+
+
+
+test=# explain analyze WITH transactions as (select count(*) as total_count, sum(amount) as total_amount, m_id, pay_id
+from transaction t
+where t.timestamp between '2022-02-22 15:49:36.043858' AND '2022-02-22 15:59:59.999999'
+group by m_id, pay_id)
+select t.total_count, t.total_amount, m.name as merchant, p.name as payment_method from transactions t
+inner join
+    merchant m ON t.m_id = m.id
+inner join
+    payment_method p ON t.pay_id = p.id ;
+                                                                                                           QUERY PLAN
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------
+ Hash Join  (cost=222980.15..223007.77 rows=16 width=76) (actual time=1371.480..1378.906 rows=16 loops=1)
+   Hash Cond: (p.id = t.pay_id)
+   ->  Seq Scan on payment_method p  (cost=0.00..22.70 rows=1270 width=36) (actual time=0.015..0.017 rows=4 loops=1)
+   ->  Hash  (cost=222979.95..222979.95 rows=16 width=48) (actual time=1371.448..1378.864 rows=16 loops=1)
+         Buckets: 1024  Batches: 1  Memory Usage: 9kB
+         ->  Hash Join  (cost=222952.33..222979.95 rows=16 width=48) (actual time=1371.405..1378.847 rows=16 loops=1)
+               Hash Cond: (m.id = t.m_id)
+               ->  Seq Scan on merchant m  (cost=0.00..22.70 rows=1270 width=36) (actual time=0.004..0.018 rows=4 loops=1)
+               ->  Hash  (cost=222952.13..222952.13 rows=16 width=20) (actual time=1371.390..1378.804 rows=16 loops=1)
+                     Buckets: 1024  Batches: 1  Memory Usage: 9kB
+                     ->  Finalize GroupAggregate  (cost=222947.75..222951.97 rows=16 width=20) (actual time=1371.308..1378.765 rows=16 loops=1)
+                           Group Key: t.m_id, t.pay_id
+                           ->  Gather Merge  (cost=222947.75..222951.49 rows=32 width=20) (actual time=1371.286..1378.727 rows=48 loops=1)
+                                 Workers Planned: 2
+                                 Workers Launched: 2
+                                 ->  Sort  (cost=221947.73..221947.77 rows=16 width=20) (actual time=1320.578..1320.581 rows=16 loops=3)
+                                       Sort Key: t.m_id, t.pay_id
+                                       Sort Method: quicksort  Memory: 26kB
+                                       Worker 0:  Sort Method: quicksort  Memory: 26kB
+                                       Worker 1:  Sort Method: quicksort  Memory: 26kB
+                                       ->  Partial HashAggregate  (cost=221947.25..221947.41 rows=16 width=20) (actual time=1320.516..1320.523 rows=16 loops=3)
+                                             Group Key: t.m_id, t.pay_id
+                                             Batches: 1  Memory Usage: 24kB
+                                             Worker 0:  Batches: 1  Memory Usage: 24kB
+                                             Worker 1:  Batches: 1  Memory Usage: 24kB
+                                             ->  Parallel Bitmap Heap Scan on transaction t  (cost=1336.37..200234.35 rows=2171290 width=12) (actual time=31.741..644.744 rows=1624933 loops=
+3)
+                                                   Recheck Cond: (("timestamp" >= '2022-02-22 15:49:36.043858'::timestamp without time zone) AND ("timestamp" <= '2022-02-22 15:59:59.999999'
+::timestamp without time zone))
+                                                   Rows Removed by Index Recheck: 5616
+                                                   Heap Blocks: lossy=10317
+                                                   ->  Bitmap Index Scan on transaction_tm_brin  (cost=0.00..33.60 rows=5217667 width=0) (actual time=3.836..3.837 rows=359680 loops=1)
+                                                         Index Cond: (("timestamp" >= '2022-02-22 15:49:36.043858'::timestamp without time zone) AND ("timestamp" <= '2022-02-22 15:59:59.999
+999'::timestamp without time zone))
+ Planning Time: 1.110 ms
+ JIT:
+   Functions: 48
+   Options: Inlining false, Optimization false, Expressions true, Deforming true
+   Timing: Generation 15.677 ms, Inlining 0.000 ms, Optimization 4.495 ms, Emission 85.378 ms, Total 105.550 ms
+ Execution Time: 1389.094 ms
+(37 rows)
+
+Time: 1391.162 ms (00:01.391)
